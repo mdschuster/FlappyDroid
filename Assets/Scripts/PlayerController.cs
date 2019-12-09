@@ -53,12 +53,10 @@ public class PlayerController : MonoBehaviour
     }
 
     private void death(){
-        GameManager.gameState=GameManager.State.GAMEOVER;
+        GameManager.instance().gameOver();
         Vector3 offset = new Vector3(3.4f,0f,1.13f);
         GameObject go = Instantiate(deathEffect, this.transform.position+offset,Quaternion.identity);
         go.GetComponent<ParticleSystem>().Play();
-        GameManager.instance().gameOver();
-        this.gameObject.SetActive(false);
     }
 
 }

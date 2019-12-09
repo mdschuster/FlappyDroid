@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject pipePrefab;
+    [SerializeField]
+    private PlayerController player;
 
     [SerializeField]
     private float spawnRange=3f;
@@ -68,11 +70,16 @@ public class GameManager : MonoBehaviour
     }
 
     public void gameOver(){
+        gameState=State.GAMEOVER;
         Time.timeScale=0.3f;
+        player.gameObject.SetActive(false);
     }
 
     public void reset(){
+        gameState=State.PLAY;
         Time.timeScale=1f;
+        player.gameObject.SetActive(true);
+        player.transform.position=Vector3.zero;
     }
 
 

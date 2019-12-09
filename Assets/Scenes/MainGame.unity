@@ -364,6 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pipePrefab: {fileID: 9063088320554830573, guid: 3bc981391f938324cac2fd1ed534064f,
     type: 3}
+  player: {fileID: 253837102}
   spawnRange: 3
   timeBetweenSpawn: 3
 --- !u!114 &485635429
