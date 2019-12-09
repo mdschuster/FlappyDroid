@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         if(pipePrefab==null) Debug.LogError("PipePrefab not found!");
-    }
+    } 
 
     // Update is called once per frame
     void Update()
