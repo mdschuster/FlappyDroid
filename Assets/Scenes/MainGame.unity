@@ -153,7 +153,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 72
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!4 &253837100
 Transform:
@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 485635427}
   - component: {fileID: 485635426}
   - component: {fileID: 485635425}
+  - component: {fileID: 485635428}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -279,6 +280,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &485635428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485635424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d5a0e60b8a054fa1bfa1b03ceaf1272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pipePrefab: {fileID: 9063088320554830573, guid: 3bc981391f938324cac2fd1ed534064f,
+    type: 3}
+  spawnRange: 3
+  timeBetweenSpawn: 3
 --- !u!4 &751831867 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 0a0556f99beedcd47b60616593534d02,
