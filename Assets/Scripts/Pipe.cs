@@ -24,6 +24,9 @@ public class Pipe : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        if(GameManager.gameState == GameManager.State.GAMEOVER){
+            return;
+        }
         //pipe object should move in one direction at a constant speed
         //TODO: Should probably use translate here
         Vector3 pos = this.transform.position;

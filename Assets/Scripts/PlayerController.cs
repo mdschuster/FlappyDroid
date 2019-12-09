@@ -36,11 +36,16 @@ public class PlayerController : MonoBehaviour
 
     
     private void jump(){
+        if(GameManager.gameState==GameManager.State.GAMEOVER){
+            return;
+        }
         Vector3 f = new Vector3(0f,jumpForce,0f);
         rb.AddForce(f,ForceMode.VelocityChange);
     }
 
     private void OnCollisionEnter(Collision other) {
+        GameManager.gameState=GameManager.State.GAMEOVER;
+        GameManager.instance().gameOver();
         Debug.Log("hit");
     }
 
