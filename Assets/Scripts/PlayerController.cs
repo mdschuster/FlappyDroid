@@ -40,4 +40,8 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(f,ForceMode.VelocityChange);
     }
 
+    private void OnCollisionEnter(Collision other) {
+        Debug.Log("hit");
+    }
+
 }
