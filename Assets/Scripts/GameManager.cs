@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void gameOver(){
-        Time.timeScale=0f;
+        Time.timeScale=0.3f;
     }
 
     public void reset(){

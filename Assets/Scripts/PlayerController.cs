@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
     BoxCollider bc;
+    
+    [SerializeField]
+    GameObject deathEffect;
 
     [SerializeField]
     private float jumpForce=5f;
@@ -17,6 +20,7 @@ public class PlayerController : MonoBehaviour
         if(rb==null) Debug.LogError("Player rigidbody not found");
         bc=GetComponent<BoxCollider>();
         if(bc==null) Debug.LogError("Player box collider not found");
+        if(deathEffect==null) Debug.LogError("No Death Effecct Found");
     }
 
     // Start is called before the first frame update
@@ -44,9 +48,17 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
-        GameManager.gameState=GameManager.State.GAMEOVER;
-        GameManager.instance().gameOver();
+        death();
         Debug.Log("hit");
+    }
+
+    private void death(){
+        GameManager.gameState=GameManager.State.GAMEOVER;
+        Vector3 offset = new Vector3(3.4f,0f,1.13f);
+        GameObject go = Instantiate(deathEffect, this.transform.position+offset,Quaternion.identity);
+        go.GetComponent<ParticleSystem>().Play();
+        GameManager.instance().gameOver();
+        this.gameObject.SetActive(false);
     }
 
 }

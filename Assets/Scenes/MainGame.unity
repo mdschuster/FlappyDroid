@@ -262,6 +262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db53c08f8c54cc84fb05e8240a5e676e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathEffect: {fileID: 1959074551308782676, guid: 2a5dd499f5ee0854087331f1eb8f151c,
+    type: 3}
   jumpForce: 10
 --- !u!1 &485635424
 GameObject:
