@@ -64,14 +64,14 @@ public class GameManager : MonoBehaviour
     private void spawnPipe(){
             //random y
             float ySpawn=Random.Range(-spawnRange,spawnRange);
-            float xSpawn=10f;
+            float xSpawn=30f;
             //actually do the spawn
             Instantiate(pipePrefab,new Vector3(xSpawn,ySpawn,0f), Quaternion.identity);
     }
 
     public void gameOver(){
         gameState=State.GAMEOVER;
-        Time.timeScale=0.3f;
+        Time.timeScale=0.7f;
         player.gameObject.SetActive(false);
     }
 
