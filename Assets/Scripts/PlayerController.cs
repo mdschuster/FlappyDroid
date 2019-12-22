@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float jumpForce=5f;
 
+    [SerializeField]
+    private ParticleSystem[] upThrust;
+
     void Awake(){
         rb=GetComponent<Rigidbody>();
         if(rb==null) Debug.LogError("Player rigidbody not found");
@@ -45,6 +48,10 @@ public class PlayerController : MonoBehaviour
         }
         Vector3 f = new Vector3(0f,jumpForce,0f);
         rb.AddForce(f,ForceMode.VelocityChange);
+        
+        foreach(ParticleSystem ps in upThrust){
+            ps.Play();
+        }
     }
 
     private void OnCollisionEnter(Collision other) {
