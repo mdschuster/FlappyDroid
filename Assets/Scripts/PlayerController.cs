@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
         }
         Vector3 f = new Vector3(0f,jumpForce,0f);
         rb.AddForce(f,ForceMode.VelocityChange);
-        
+
         foreach(ParticleSystem ps in upThrust){
             ps.Play();
         }
@@ -57,6 +57,11 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         death();
         Debug.Log("hit");
+    }
+
+    private void OnTriggerEnter(Collider other){
+        death();
+        Debug.Log("left game region");
     }
 
     private void death(){
