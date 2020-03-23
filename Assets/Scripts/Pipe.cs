@@ -30,6 +30,12 @@ public class Pipe : MonoBehaviour
 {
 
     /// <summary>
+    /// Static variable that determines if the pipes will update their movement.
+    /// </summary>
+    [System.NonSerialized]
+    public static bool moving=true;
+
+    /// <summary>
     /// X position when the pipe will despawn
     /// </summary>
     private float despawnPosition=-20;
@@ -49,9 +55,7 @@ public class Pipe : MonoBehaviour
     /// Physics update. Contains code for moving the pipe.
     /// </summary>
     private void FixedUpdate() {
-        if(GameManager.gameState == GameManager.State.GAMEOVER){
-            return;
-        }
+        if(moving==false) return;
         //pipe object should move in one direction at a constant speed
         //TODO: Should probably use translate here
         Vector3 pos = this.transform.position;

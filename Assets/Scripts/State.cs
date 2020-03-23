@@ -32,7 +32,7 @@ public abstract class State
 
     public enum STATE
     {
-        PLAY,GAMEOVER
+        PLAY,GAMEOVER,RESET
     }
 
     public enum EVENT
@@ -43,10 +43,9 @@ public abstract class State
     public STATE name;
     protected EVENT stage;
     protected State nextState;
-    protected PlayerController playerController;
 
-    public State(PlayerController pc){
-        this.playerController=pc;
+    public State(){
+
     }
 
     public virtual void Enter(){
@@ -74,8 +73,9 @@ public abstract class State
 
 public class Play : State
 {
-    public Play(PlayerController pc):base(pc){
+    public Play():base(){
         name = STATE.PLAY;
+        stage=EVENT.ENTER;
     }
 
     public override void Enter(){
@@ -83,30 +83,58 @@ public class Play : State
     }
 
     public override void Update(){
-        if(playerController.getHealth()<=0){
+        if(GameManager.instance().dead==true){
             stage=EVENT.EXIT;
+            return;
         }
+        GameManager.instance().spawnPipe();
     }
 
     public override void Exit(){
-        playerController.death();
-        nextState=new GameOver(playerController);
+        nextState=new GameOver();
         base.Exit();
     }
 }
 
 public class GameOver : State
 {
-    public GameOver(PlayerController pc):base(pc){
-        name = STATE.PLAY;
+    public GameOver():base(){
+        name = STATE.GAMEOVER;
+        stage=EVENT.ENTER;
     }
 
     public override void Enter(){
+        GameManager.instance().gameOver();
+        GameManager.instance().death();
+        Pipe.moving=false;
         base.Enter();
     }
 
     public override void Update(){
 
+    }
+
+    public override void Exit(){
+        base.Exit();
+    }
+}
+
+public class Reset : State
+{
+    public Reset():base(){
+        name = STATE.RESET;
+        stage=EVENT.ENTER;
+    }
+
+    public override void Enter(){
+        GameManager.instance().reset();
+        Pipe.moving=true;
+        base.Enter();
+    }
+
+    public override void Update(){
+        nextState=new Play();
+        stage=EVENT.EXIT;
     }
 
     public override void Exit(){

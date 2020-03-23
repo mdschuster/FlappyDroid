@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     /// GameObject prefab with death particle effect. Serialized.
     /// </summary>
     [SerializeField]
-    GameObject deathEffect;
+    public GameObject deathEffect;
 
     /// <summary>
     /// Upward force when pressed, Serialized.
@@ -89,9 +89,6 @@ public class PlayerController : MonoBehaviour
     /// particle system associated with the upThrust array.
     /// </summary>
     private void jump(){
-        if(GameManager.gameState==GameManager.State.GAMEOVER){
-            return;
-        }
         Vector3 f = new Vector3(0f,jumpForce,0f);
         rb.AddForce(f,ForceMode.VelocityChange);
 
@@ -105,7 +102,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="other">Other collider involved in the collision.</param>
     private void OnCollisionEnter(Collision other) {
-        death();
+        GameManager.instance().dead=true;
         Debug.Log("hit");
     }
 
@@ -114,18 +111,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     /// <param name="other">Other collider involved in the collision.</param>
     private void OnTriggerEnter(Collider other){
-        death();
+        GameManager.instance().dead=true;
         Debug.Log("left game region");
     }
-
-    /// <summary>
-    /// Code to run when the player object death is triggered.
-    /// </summary>
-    private void death(){
-        GameManager.instance().gameOver();
-        Vector3 offset = new Vector3(3.4f,0f,1.13f);
-        GameObject go = Instantiate(deathEffect, this.transform.position+offset,Quaternion.identity);
-        go.GetComponent<ParticleSystem>().Play();
-    }
-
 }

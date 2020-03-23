@@ -64,17 +64,15 @@ public class GameManager : MonoBehaviour
     private float spawnTime=0;
 
     /// <summary>
-    /// Game state.
+    /// Player state information, true for dead, false for alive.
     /// </summary>
-    public enum State
-    {
-        PLAY,GAMEOVER
-    }
+    [System.NonSerialized]
+    public bool dead = false;
 
     /// <summary>
-    /// gameState enum. Contains current game state.
+    /// State machine variable.
     /// </summary>
-    public static State gameState = new State();
+    private State state;
 
     private void Awake() {
         if(_instance==null){
@@ -90,14 +88,14 @@ public class GameManager : MonoBehaviour
         return _instance;
     }
 
-
-
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
         if(pipePrefab==null) Debug.LogError("PipePrefab not found!");
+        state=new Play();
+
     } 
 
     /// <summary>
@@ -105,34 +103,31 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if(gameState==State.GAMEOVER){
-            return;
-        }
-
-        if(spawnTime<=0){
-            spawnTime=timeBetweenSpawn;
-            spawnPipe();
-        } else {
-            spawnTime-=Time.deltaTime;
-        }
+        //process the current state of the game every frame.
+        state=state.process();
     }
 
     /// <summary>
     /// Spawns pipe prefab based on allowed spawn ranges.
     /// </summary>
-    private void spawnPipe(){
-            //random y
-            float ySpawn=Random.Range(-spawnRange,spawnRange);
-            float xSpawn=30f;
-            //actually do the spawn
-            Instantiate(pipePrefab,new Vector3(xSpawn,ySpawn,0f), Quaternion.identity);
+    public void spawnPipe(){
+
+            if(spawnTime<=0){
+                spawnTime=timeBetweenSpawn;
+                //random y
+                float ySpawn=Random.Range(-spawnRange,spawnRange);
+                float xSpawn=30f;
+                //actually do the spawn
+                Instantiate(pipePrefab,new Vector3(xSpawn,ySpawn,0f), Quaternion.identity);
+            } else {
+                spawnTime-=Time.deltaTime;
+            }
     }
 
     /// <summary>
     /// Code to run when the game over is triggered.
     /// </summary>
     public void gameOver(){
-        gameState=State.GAMEOVER;
         Time.timeScale=0.7f;
         player.gameObject.SetActive(false);
     }
@@ -141,10 +136,20 @@ public class GameManager : MonoBehaviour
     /// Code to run when the reset is triggered.
     /// </summary>
     public void reset(){
-        gameState=State.PLAY;
+        this.dead=false;
         Time.timeScale=1f;
         player.gameObject.SetActive(true);
         player.transform.position=Vector3.zero;
+    }
+
+    /// <summary>
+    /// Code to run when the player object death is triggered.
+    /// </summary>
+    public void death(){
+        GameManager.instance().gameOver();
+        Vector3 offset = new Vector3(3.4f,0f,1.13f);
+        GameObject go = Instantiate(player.deathEffect, player.transform.position+offset,Quaternion.identity);
+        go.GetComponent<ParticleSystem>().Play();
     }
 
 
