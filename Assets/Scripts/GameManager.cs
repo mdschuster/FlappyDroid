@@ -28,7 +28,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
     /// <summary>
     /// Instance of this GameManager object.
     /// </summary>
@@ -73,6 +72,13 @@ public class GameManager : MonoBehaviour
     /// State machine variable.
     /// </summary>
     private State state;
+
+    /// <summary>
+    /// Static variable that determines if the pipes will update their movement.
+    /// </summary>
+    [System.NonSerialized]
+    public bool moving=true;
+
 
     private void Awake() {
         if(_instance==null){

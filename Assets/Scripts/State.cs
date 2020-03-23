@@ -106,7 +106,7 @@ public class GameOver : State
     public override void Enter(){
         GameManager.instance().gameOver();
         GameManager.instance().death();
-        Pipe.moving=false;
+        GameManager.instance().moving=false;
         base.Enter();
     }
 
@@ -115,6 +115,7 @@ public class GameOver : State
     }
 
     public override void Exit(){
+        nextState=new Reset();
         base.Exit();
     }
 }
@@ -128,7 +129,7 @@ public class Reset : State
 
     public override void Enter(){
         GameManager.instance().reset();
-        Pipe.moving=true;
+        GameManager.instance().moving=false;
         base.Enter();
     }
 

@@ -28,13 +28,6 @@ using UnityEngine;
 
 public class Pipe : MonoBehaviour
 {
-
-    /// <summary>
-    /// Static variable that determines if the pipes will update their movement.
-    /// </summary>
-    [System.NonSerialized]
-    public static bool moving=true;
-
     /// <summary>
     /// X position when the pipe will despawn
     /// </summary>
@@ -55,7 +48,7 @@ public class Pipe : MonoBehaviour
     /// Physics update. Contains code for moving the pipe.
     /// </summary>
     private void FixedUpdate() {
-        if(moving==false) return;
+        if(GameManager.instance().moving==false) return;
         //pipe object should move in one direction at a constant speed
         //TODO: Should probably use translate here
         Vector3 pos = this.transform.position;
