@@ -136,6 +136,7 @@ public class GameManager : MonoBehaviour
     public void gameOver(){
         Time.timeScale=0.7f;
         player.gameObject.SetActive(false);
+        this.moving=false;
     }
 
     /// <summary>
@@ -143,6 +144,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void reset(){
         this.dead=false;
+        this.moving=true;
         Time.timeScale=1f;
         player.gameObject.SetActive(true);
         player.transform.position=Vector3.zero;

@@ -43,9 +43,10 @@ public abstract class State
     public STATE name;
     protected EVENT stage;
     protected State nextState;
+    protected GameManager gameManager;
 
     public State(){
-
+        gameManager = GameManager.instance();
     }
 
     public virtual void Enter(){
@@ -83,11 +84,11 @@ public class Play : State
     }
 
     public override void Update(){
-        if(GameManager.instance().dead==true){
+        if(gameManager.dead==true){
             stage=EVENT.EXIT;
             return;
         }
-        GameManager.instance().spawnPipe();
+       gameManager.spawnPipe();
     }
 
     public override void Exit(){
@@ -104,9 +105,8 @@ public class GameOver : State
     }
 
     public override void Enter(){
-        GameManager.instance().gameOver();
-        GameManager.instance().death();
-        GameManager.instance().moving=false;
+        gameManager.gameOver();
+        gameManager.death();
         base.Enter();
     }
 
@@ -128,8 +128,7 @@ public class Reset : State
     }
 
     public override void Enter(){
-        GameManager.instance().reset();
-        GameManager.instance().moving=false;
+        gameManager.reset();
         base.Enter();
     }
 
