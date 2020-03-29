@@ -31,14 +31,15 @@ public class Pipe : MonoBehaviour
     /// <summary>
     /// X position when the pipe will despawn
     /// </summary>
-    private float despawnPosition=-20;
+    private float despawnPosition = -20;
 
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update()
     {
-        if(this.transform.position.x< despawnPosition){
+        if (this.transform.position.x < despawnPosition)
+        {
             Destroy(this.gameObject);
         }
 
@@ -47,12 +48,13 @@ public class Pipe : MonoBehaviour
     /// <summary>
     /// Physics update. Contains code for moving the pipe.
     /// </summary>
-    private void FixedUpdate() {
-        if(GameManager.instance().moving==false) return;
+    private void FixedUpdate()
+    {
+        if (GameManager.instance().moving == false) return;
         //pipe object should move in one direction at a constant speed
         //TODO: Should probably use translate here
         Vector3 pos = this.transform.position;
-        pos.x-=0.1f;
-        this.transform.position=pos;
+        pos.x -= 0.1f;
+        this.transform.position = pos;
     }
 }

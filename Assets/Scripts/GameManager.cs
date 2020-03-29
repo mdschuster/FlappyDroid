@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Instance of this GameManager object.
     /// </summary>
-    private static GameManager _instance=null;
+    private static GameManager _instance = null;
 
     /// <summary>
     /// Prefab GameObject that represents the pipe. Serialized.
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     /// Y Rgane that the pipes can spawn over. Serialized.
     /// </summary>
     [SerializeField]
-    private float spawnRange=3f;
+    private float spawnRange = 3f;
 
     /// <summary>
     /// Starting time between pipe spawns. Serialized.
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Timer for spawn. Determines when new spawns will happen.
     /// </summary>
-    private float spawnTime=0;
+    private float spawnTime = 0;
 
     /// <summary>
     /// Player state information, true for dead, false for alive.
@@ -77,12 +77,14 @@ public class GameManager : MonoBehaviour
     /// Static variable that determines if the pipes will update their movement.
     /// </summary>
     [System.NonSerialized]
-    public bool moving=true;
+    public bool moving = true;
 
 
-    private void Awake() {
-        if(_instance==null){
-            _instance=this;
+    private void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
         }
     }
 
@@ -90,7 +92,8 @@ public class GameManager : MonoBehaviour
     /// Global entry point for the GameManager Singleton class.
     /// </summary>
     /// <returns>Singleton instance of the GameManager class</returns>
-    public static GameManager instance(){
+    public static GameManager instance()
+    {
         return _instance;
     }
 
@@ -99,10 +102,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if(pipePrefab==null) Debug.LogError("PipePrefab not found!");
-        state=new Play();
+        if (pipePrefab == null) Debug.LogError("PipePrefab not found!");
+        state = new Play();
 
-    } 
+    }
 
     /// <summary>
     /// Update is called once per frame
@@ -110,53 +113,60 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //process the current state of the game every frame.
-        state=state.process();
+        state = state.process();
     }
 
     /// <summary>
     /// Spawns pipe prefab based on allowed spawn ranges.
     /// </summary>
-    public void spawnPipe(){
+    public void spawnPipe()
+    {
 
-            if(spawnTime<=0){
-                spawnTime=timeBetweenSpawn;
-                //random y
-                float ySpawn=Random.Range(-spawnRange,spawnRange);
-                float xSpawn=30f;
-                //actually do the spawn
-                Instantiate(pipePrefab,new Vector3(xSpawn,ySpawn,0f), Quaternion.identity);
-            } else {
-                spawnTime-=Time.deltaTime;
-            }
+        if (spawnTime <= 0)
+        {
+            spawnTime = timeBetweenSpawn;
+            //random y
+            float ySpawn = Random.Range(-spawnRange, spawnRange);
+            float xSpawn = 30f;
+            //actually do the spawn
+            Instantiate(pipePrefab, new Vector3(xSpawn, ySpawn, 0f), Quaternion.identity);
+        }
+        else
+        {
+            spawnTime -= Time.deltaTime;
+        }
     }
 
     /// <summary>
     /// Code to run when the game over is triggered.
     /// </summary>
-    public void gameOver(){
-        Time.timeScale=0.7f;
+    public void gameOver()
+    {
+        Time.timeScale = 0.7f;
         player.gameObject.SetActive(false);
-        this.moving=false;
+        this.moving = false;
     }
 
     /// <summary>
     /// Code to run when the reset is triggered.
     /// </summary>
-    public void reset(){
-        this.dead=false;
-        this.moving=true;
-        Time.timeScale=1f;
+    public void reset()
+    {
+        this.dead = false;
+        this.moving = true;
+        Time.timeScale = 1f;
         player.gameObject.SetActive(true);
-        player.transform.position=Vector3.zero;
+        player.transform.position = Vector3.zero;
     }
 
     /// <summary>
     /// Code to run when the player object death is triggered.
     /// </summary>
-    public void death(){
+    public void death()
+    {
         GameManager.instance().gameOver();
-        Vector3 offset = new Vector3(3.4f,0f,1.13f);
-        GameObject go = Instantiate(player.deathEffect, player.transform.position+offset,Quaternion.identity);
+        Vector3 offset = new Vector3(3.4f, 0f, 1.13f);
+        GameObject go = Instantiate(player.deathEffect, player.transform.position + offset, Quaternion.identity);
         go.GetComponent<ParticleSystem>().Play();
     }
 

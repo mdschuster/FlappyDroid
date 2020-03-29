@@ -29,15 +29,18 @@ using System;
 
 public abstract class State
 {
+    protected static Play play = new Play();
+    protected static GameOver gameOver = new GameOver();
+    protected static Reset reset = new Reset();
 
     public enum STATE
     {
-        PLAY,GAMEOVER,RESET
+        PLAY, GAMEOVER, RESET
     }
 
     public enum EVENT
     {
-        EXIT,UPDATE,ENTER
+        EXIT, UPDATE, ENTER
     }
 
     public STATE name;
@@ -45,24 +48,30 @@ public abstract class State
     protected State nextState;
     protected GameManager gameManager;
 
-    public State(){
+    public State()
+    {
         gameManager = GameManager.instance();
     }
 
-    public virtual void Enter(){
-        stage=EVENT.UPDATE;
+    public virtual void Enter()
+    {
+        stage = EVENT.UPDATE;
     }
-    public virtual void Update(){
-        stage=EVENT.UPDATE;
+    public virtual void Update()
+    {
+        stage = EVENT.UPDATE;
     }
-    public virtual void Exit(){
-        stage=EVENT.EXIT;
+    public virtual void Exit()
+    {
+        stage = EVENT.EXIT;
     }
 
-    public State process(){
-        if(stage==EVENT.ENTER) Enter();
-        if(stage==EVENT.UPDATE) Update();
-        if(stage==EVENT.EXIT){
+    public State process()
+    {
+        if (stage == EVENT.ENTER) Enter();
+        if (stage == EVENT.UPDATE) Update();
+        if (stage == EVENT.EXIT)
+        {
             Exit();
             return nextState;
         }
@@ -74,70 +83,83 @@ public abstract class State
 
 public class Play : State
 {
-    public Play():base(){
+    public Play() : base()
+    {
         name = STATE.PLAY;
-        stage=EVENT.ENTER;
+        stage = EVENT.ENTER;
     }
 
-    public override void Enter(){
+    public override void Enter()
+    {
         base.Enter();
     }
 
-    public override void Update(){
-        if(gameManager.dead==true){
-            stage=EVENT.EXIT;
+    public override void Update()
+    {
+        if (gameManager.dead == true)
+        {
+            stage = EVENT.EXIT;
             return;
         }
-       gameManager.spawnPipe();
+        gameManager.spawnPipe();
     }
 
-    public override void Exit(){
-        nextState=new GameOver();
+    public override void Exit()
+    {
+        nextState = gameOver;
         base.Exit();
     }
 }
 
 public class GameOver : State
 {
-    public GameOver():base(){
+    public GameOver() : base()
+    {
         name = STATE.GAMEOVER;
-        stage=EVENT.ENTER;
+        stage = EVENT.ENTER;
     }
 
-    public override void Enter(){
+    public override void Enter()
+    {
         gameManager.gameOver();
         gameManager.death();
         base.Enter();
     }
 
-    public override void Update(){
+    public override void Update()
+    {
 
     }
 
-    public override void Exit(){
-        nextState=new Reset();
+    public override void Exit()
+    {
+        nextState = reset;
         base.Exit();
     }
 }
 
 public class Reset : State
 {
-    public Reset():base(){
+    public Reset() : base()
+    {
         name = STATE.RESET;
-        stage=EVENT.ENTER;
+        stage = EVENT.ENTER;
     }
 
-    public override void Enter(){
+    public override void Enter()
+    {
         gameManager.reset();
         base.Enter();
     }
 
-    public override void Update(){
-        nextState=new Play();
-        stage=EVENT.EXIT;
+    public override void Update()
+    {
+        nextState = play;
+        stage = EVENT.EXIT;
     }
 
-    public override void Exit(){
+    public override void Exit()
+    {
         base.Exit();
     }
 }

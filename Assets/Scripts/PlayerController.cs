@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     /// Contains a reference to the boxCollider.
     /// </summary>
     BoxCollider bc;
-    
+
     /// <summary>
     /// GameObject prefab with death particle effect. Serialized.
     /// </summary>
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     /// Upward force when pressed, Serialized.
     /// </summary>
     [SerializeField]
-    private float jumpForce=5f;
+    private float jumpForce = 5f;
 
     /// <summary>
     /// Array of particles systems to play when 'jumping'. Serialized.
@@ -65,12 +65,13 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Runs before Start().
     /// </summary>
-    void Awake(){
-        rb=GetComponent<Rigidbody>();
-        if(rb==null) Debug.LogError("Player rigidbody not found");
-        bc=GetComponent<BoxCollider>();
-        if(bc==null) Debug.LogError("Player box collider not found");
-        if(deathEffect==null) Debug.LogError("No Death Effecct Found");
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        if (rb == null) Debug.LogError("Player rigidbody not found");
+        bc = GetComponent<BoxCollider>();
+        if (bc == null) Debug.LogError("Player box collider not found");
+        if (deathEffect == null) Debug.LogError("No Death Effecct Found");
     }
 
     /// <summary>
@@ -78,9 +79,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)){
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             jump();
-        }        
+        }
 
     }
 
@@ -88,11 +90,13 @@ public class PlayerController : MonoBehaviour
     /// Jump adds the jumpForce in the upward direction and plays each
     /// particle system associated with the upThrust array.
     /// </summary>
-    private void jump(){
-        Vector3 f = new Vector3(0f,jumpForce,0f);
-        rb.AddForce(f,ForceMode.VelocityChange);
+    private void jump()
+    {
+        Vector3 f = new Vector3(0f, jumpForce, 0f);
+        rb.AddForce(f, ForceMode.VelocityChange);
 
-        foreach(ParticleSystem ps in upThrust){
+        foreach (ParticleSystem ps in upThrust)
+        {
             ps.Play();
         }
     }
@@ -101,8 +105,9 @@ public class PlayerController : MonoBehaviour
     /// Code to run when two object colliders interact.
     /// </summary>
     /// <param name="other">Other collider involved in the collision.</param>
-    private void OnCollisionEnter(Collision other) {
-        GameManager.instance().dead=true;
+    private void OnCollisionEnter(Collision other)
+    {
+        GameManager.instance().dead = true;
         Debug.Log("hit");
     }
 
@@ -110,8 +115,9 @@ public class PlayerController : MonoBehaviour
     /// Code to run when two objects interact via triggers.
     /// </summary>
     /// <param name="other">Other collider involved in the collision.</param>
-    private void OnTriggerEnter(Collider other){
-        GameManager.instance().dead=true;
+    private void OnTriggerEnter(Collider other)
+    {
+        GameManager.instance().dead = true;
         Debug.Log("left game region");
     }
 }
