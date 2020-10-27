@@ -32,10 +32,11 @@ public abstract class State
     protected static Play play = new Play();
     protected static GameOver gameOver = new GameOver();
     protected static Reset reset = new Reset();
+    protected static Pause pause = new Pause();
 
     public enum STATE
     {
-        PLAY, GAMEOVER, RESET
+        PLAY, GAMEOVER, RESET, PAUSE
     }
 
     public enum EVENT
@@ -73,6 +74,7 @@ public abstract class State
         if (stage == EVENT.EXIT)
         {
             Exit();
+            nextState.stage = EVENT.ENTER; //because I'm using static classes the constructor is not called again.
             return nextState;
         }
         return this;
@@ -98,15 +100,25 @@ public class Play : State
     {
         if (gameManager.dead == true)
         {
+            nextState = gameOver;
             stage = EVENT.EXIT;
             return;
         }
-        gameManager.spawnPipe();
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            nextState = pause;
+            gameManager.player.toggleGravity();
+            gameManager.moving = false;
+            stage = EVENT.EXIT;
+            return;
+        }
+        gameManager.spawnPipePair();
+        gameManager.spawnBuilding();
+        gameManager.player.checkInput();
     }
 
     public override void Exit()
     {
-        nextState = gameOver;
         base.Exit();
     }
 }
@@ -156,6 +168,37 @@ public class Reset : State
     {
         nextState = play;
         stage = EVENT.EXIT;
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
+}
+
+public class Pause : State
+{
+    public Pause() : base()
+    {
+        name = STATE.RESET;
+        stage = EVENT.ENTER;
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+    }
+
+    public override void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            gameManager.player.toggleGravity();
+            gameManager.moving = true;
+
+            nextState = play;
+            stage = EVENT.EXIT;
+        }
     }
 
     public override void Exit()

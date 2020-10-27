@@ -26,21 +26,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pipe : MonoBehaviour
+public class Mover : MonoBehaviour
 {
     /// <summary>
     /// X position when the pipe will despawn
     /// </summary>
     private float despawnPosition = -20;
 
+    private Transform parent;
+
+    /// <summary>
+    /// Start is called on the frame when a script is enabled just before
+    /// any of the Update methods is called the first time.
+    /// </summary>
+    void Start()
+    {
+        if (this.transform.parent != null)
+        {
+            parent = this.transform.parent;
+        }
+        else
+        {
+            parent = this.transform;
+        }
+    }
+
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update()
     {
-        if (this.transform.position.x < despawnPosition)
+        if (parent.position.x < despawnPosition)
         {
-            Destroy(this.gameObject);
+            Destroy(parent.gameObject);
         }
 
     }
@@ -53,8 +71,8 @@ public class Pipe : MonoBehaviour
         if (GameManager.instance().moving == false) return;
         //pipe object should move in one direction at a constant speed
         //TODO: Should probably use translate here
-        Vector3 pos = this.transform.position;
+        Vector3 pos = parent.position;
         pos.x -= 0.1f;
-        this.transform.position = pos;
+        parent.position = pos;
     }
 }

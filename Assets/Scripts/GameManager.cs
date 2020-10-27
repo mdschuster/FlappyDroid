@@ -39,11 +39,14 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject pipePrefab;
 
+    [SerializeField]
+    private List<GameObject> buildingPrefabList;
+
     /// <summary>
     /// Object that contains the PlayerController script. Serialized.
     /// </summary>
     [SerializeField]
-    private PlayerController player;
+    public PlayerController player;
 
     /// <summary>
     /// Y Rgane that the pipes can spawn over. Serialized.
@@ -61,6 +64,9 @@ public class GameManager : MonoBehaviour
     /// Timer for spawn. Determines when new spawns will happen.
     /// </summary>
     private float spawnTime = 0;
+
+    private float timeBetweenBuildingSpawn = 2f;
+    private float buildingSpawnTime = 0f;
 
     /// <summary>
     /// Player state information, true for dead, false for alive.
@@ -116,24 +122,49 @@ public class GameManager : MonoBehaviour
         state = state.process();
     }
 
-    /// <summary>
-    /// Spawns pipe prefab based on allowed spawn ranges.
-    /// </summary>
-    public void spawnPipe()
+    public void spawnPipePair()
     {
-
         if (spawnTime <= 0)
         {
             spawnTime = timeBetweenSpawn;
             //random y
-            float ySpawn = Random.Range(-spawnRange, spawnRange);
+            float topYSpawn = Random.Range(-spawnRange, spawnRange);
+            float topYAngle = Random.Range(0f, 180f);
             float xSpawn = 30f;
             //actually do the spawn
-            Instantiate(pipePrefab, new Vector3(xSpawn, ySpawn, 0f), Quaternion.identity);
+            Instantiate(pipePrefab, new Vector3(xSpawn, topYSpawn, -2.5f), Quaternion.Euler(0f, topYAngle, 0f));
+
+            float botYSpawn = topYSpawn - 2f - Random.Range(0f, 2f);
+            float botYAngle = Random.Range(0f, 180f);
+
+
+            Instantiate(pipePrefab, new Vector3(xSpawn, botYSpawn, -2.5f), Quaternion.Euler(180f, botYAngle, 0f));
+
+            //also spawn score plane here too!
+
         }
         else
         {
             spawnTime -= Time.deltaTime;
+        }
+    }
+
+    public void spawnBuilding()
+    {
+        if (buildingSpawnTime <= 0)
+        {
+            buildingSpawnTime = timeBetweenBuildingSpawn;
+            //random y
+            float ySpawn = -12f - Random.Range(0f, 1f);
+            float xSpawn = 30f;
+
+            GameObject chosenBuilding = buildingPrefabList[Random.Range(0, buildingPrefabList.Count)];
+            //actually do the spawn
+            Instantiate(chosenBuilding, new Vector3(xSpawn, ySpawn, -2.5f), Quaternion.Euler(0f, 90f, 0f));
+        }
+        else
+        {
+            buildingSpawnTime -= Time.deltaTime;
         }
     }
 
@@ -142,7 +173,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void gameOver()
     {
-        Time.timeScale = 0.7f;
         player.gameObject.SetActive(false);
         this.moving = false;
     }
@@ -166,7 +196,7 @@ public class GameManager : MonoBehaviour
     {
         GameManager.instance().gameOver();
         Vector3 offset = new Vector3(3.4f, 0f, 1.13f);
-        GameObject go = Instantiate(player.deathEffect, player.transform.position + offset, Quaternion.identity);
+        GameObject go = Instantiate(player.deathEffect, player.transform.position, Quaternion.identity);
         go.GetComponent<ParticleSystem>().Play();
     }
 

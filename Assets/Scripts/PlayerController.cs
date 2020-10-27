@@ -57,12 +57,6 @@ public class PlayerController : MonoBehaviour
     private float jumpForce = 5f;
 
     /// <summary>
-    /// Array of particles systems to play when 'jumping'. Serialized.
-    /// </summary>
-    [SerializeField]
-    private ParticleSystem[] upThrust;
-
-    /// <summary>
     /// Runs before Start().
     /// </summary>
     void Awake()
@@ -71,19 +65,15 @@ public class PlayerController : MonoBehaviour
         if (rb == null) Debug.LogError("Player rigidbody not found");
         bc = GetComponent<BoxCollider>();
         if (bc == null) Debug.LogError("Player box collider not found");
-        if (deathEffect == null) Debug.LogError("No Death Effecct Found");
+        if (deathEffect == null) Debug.LogError("No Death Effect Found");
     }
 
-    /// <summary>
-    /// Update is called every frame of the game.
-    /// </summary>
-    void Update()
+    public void checkInput()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             jump();
         }
-
     }
 
     /// <summary>
@@ -94,11 +84,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 f = new Vector3(0f, jumpForce, 0f);
         rb.AddForce(f, ForceMode.VelocityChange);
-
-        foreach (ParticleSystem ps in upThrust)
-        {
-            ps.Play();
-        }
     }
 
     /// <summary>
@@ -117,7 +102,19 @@ public class PlayerController : MonoBehaviour
     /// <param name="other">Other collider involved in the collision.</param>
     private void OnTriggerEnter(Collider other)
     {
-        GameManager.instance().dead = true;
-        Debug.Log("left game region");
+        //score a point
+        print("point!");
+    }
+
+    public void toggleGravity()
+    {
+        if (rb.isKinematic == false)
+        {
+            rb.isKinematic = true;
+        }
+        else
+        {
+            rb.isKinematic = false;
+        }
     }
 }
